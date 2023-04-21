@@ -1,0 +1,6 @@
+{
+  "watch": ["scripts"],
+  "ext": "ts",
+  "exec": "tsc"
+}
+

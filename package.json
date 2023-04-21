@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "browser-sync": "^2.29.1",
+    "node-sass": "^8.0.0",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "scss": "node-sass style.scss -o css --watch",
+    "serve": "browser-sync start --server --files 'css/*.css,  scripts/*.js, *.html'"
+  }
+}
