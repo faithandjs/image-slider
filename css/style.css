@@ -24,12 +24,14 @@ section {
     position: relative;
     order: inherit; }
     .container .box .text {
-      opacity: 0;
       transition: all 3s ease-out; }
       .container .box .text p {
-        text-transform: uppercase; }
+        text-transform: uppercase;
+        opacity: 0; }
       .container .box .text h3 {
-        text-transform: capitalize; }
+        text-transform: capitalize;
+        position: absolute;
+        bottom: 20px; }
     .container .box img {
       z-index: -1;
       transition: all 1.2s ease-out;

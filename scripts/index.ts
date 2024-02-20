@@ -34,29 +34,6 @@ const getPrevOrNext = (count: number, type: 'p' | 'n') =>
     ? 0
     : count + 1;
 
-const rotateView = () => {
-  const current = Array.from(boxes).findIndex((item) =>
-    item.classList.contains('active')
-  );
-
-  // console.log(left, right, totalIds, nextSub - 6);
-
-  // const numbers = [1, 2, 3, 4, 5, 6];
-  // numbers.sort((a, b) => b - a); // Sort in descending order
-  // numbers.unshift(numbers.pop()!); // Move last element to beginning
-  // numbers.unshift(numbers.pop()!);
-
-  // boxes.forEach((box, id) => {
-  //   const inactives = Array.from(document.querySelectorAll('.inactive'));
-  //   const in1 = getInactive(0);
-  //   const in2 = getInactive(1);
-  // });
-
-  // const inactives: NodeListOf<HTMLDivElement> =
-  //   document.querySelectorAll('.inactive');
-  // inactives[1].style.order = '-1';
-};
-
 const clickBar = (box: HTMLDivElement) => {
   const current = Array.from(boxes).findIndex((item) => item === box);
 
@@ -68,7 +45,7 @@ const clickBar = (box: HTMLDivElement) => {
     if (current && !classList.contains('active')) {
       classList.remove('inactive');
       classList.add('active');
-    } else {
+    } else if (!current) {
       classList.remove('active');
     }
   });
@@ -112,39 +89,45 @@ const clickBar = (box: HTMLDivElement) => {
 
   // GETTING THE BARS IN VIEW
   const validBars: Array<HTMLDivElement> = [];
-  const in1 = getInactive(0, document.querySelectorAll('.inactive'), current);
-  const in2 = getInactive(1, document.querySelectorAll('.inactive'), current);
+  const endID = getInactive(0, document.querySelectorAll('.inactive'), current);
+  const startID = getInactive(
+    1,
+    document.querySelectorAll('.inactive'),
+    current
+  );
 
   boxes.forEach((box, id) => {
-    const logic = in2 < in1 ? id <= in1 && id >= in2 : id <= in1 || id >= in2;
+    const logic =
+      startID < endID
+        ? id <= endID && id >= startID
+        : id <= endID || id >= startID;
     if (logic) validBars.push(box);
   });
 
-  const startIdx = boxes[in2];
-  const endIdx = boxes[in1];
+  const startElm = boxes[startID];
+  const endElm = boxes[endID];
+  const startElmID = validBars.indexOf(startElm);
+  const endElmID = validBars.indexOf(endElm);
 
-  validBars
-    .sort((a, b) => {
-      if (a === startIdx && !(b === startIdx)) {
-        return -1;
-      }
-      if (b === startIdx && !(a === startIdx)) {
-        return 1;
-      }
-      if (a === endIdx && !(b === endIdx)) {
-        return 1;
-      }
-      if (b === endIdx && !(a === endIdx)) {
-        return -1;
-      }
-      if (a === endIdx && b === endIdx) {
-        return endIdx > startIdx
-          ? a.compareDocumentPosition(b)
-          : b.compareDocumentPosition(a);
-      }
-      return 0;
-    })
-    .forEach((item, id) => (item.style.order = `${id}`));
+  // if (validBars.indexOf(startElm) === 0) {
+  //   console.log('here lol');
+  // } else {
+  //   // console.log(validBars);
+  //   validBars
+  //     .sort((a, b) => {
+  //       const aID = validBars.indexOf(a);
+  //       const bID = validBars.indexOf(b);
+
+  //       console.log(aID, bID);
+  //       if (a === startElm) return -1;
+  //       if (a === endElm) return 1;
+
+  //       return 0;
+  //     })
+  //     .forEach((item, id) => (item.style.order = `${id}`));
+  // }
+
+  console.log(validBars);
 };
 
 const controls = (state: boolean) => {
@@ -166,7 +149,12 @@ const controls = (state: boolean) => {
 // eventlisteners
 boxes.forEach((box, id) => {
   box.addEventListener('click', () => clickBar(box));
+
+  // DELETE
+  const h3 = box.querySelector('h3');
+  h3!.textContent = `${id}`;
 });
+
 document
   .querySelector('.prev')!
   .addEventListener('click', () => controls(false));

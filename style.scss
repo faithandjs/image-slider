@@ -30,11 +30,14 @@ section {
     .text {
       p {
         text-transform: uppercase;
+        opacity: 0;
       }
       h3 {
         text-transform: capitalize;
+        // DELETE
+        position: absolute;
+        bottom: 20px;
       }
-      opacity: 0;
       transition: all 3s ease-out;
     }
     img {
